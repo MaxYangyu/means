@@ -183,14 +183,15 @@
             $(n).on(o, w)
         });
         n.id = "player";
-        y(n, '{{ live_url }}', "application/x-mpegURL")
+        y(n, '{{ live_url }}', "application/x-mpegURL");
+        n.setAttribute("style", "/*position: fixed;*/height:inherit");
         n.setAttribute("preload", "auto");
         n.setAttribute("webkit-playsinline", "true");
         n.setAttribute("playsinline", "true");
         n.setAttribute("x-webkit-airplay", "true");
         n.setAttribute("x5-video-player-type", "h5");
         n.setAttribute("x5-video-player-fullscreen", "true");
-        n.setAttribute("style", "position: fixed;");
+
         e.appendChild(n);
         if (o || t) {
             n.play()
@@ -236,7 +237,8 @@
             send_message();
         });
 
-        $(".chat_input").focus(
+//上面点击 获取焦点并处理显示隐藏  这应该不用再判断
+/*        $(".chat_input").focus(
             function(){
                 if($(".ngmob_footer").css("display")=='block') {
                     $(".live_con").hide();
@@ -246,16 +248,26 @@
             }
         );
 
+*/
+       //为了解决虚拟键盘挡住input
+		$('.chat_input').focus(function () {
+			var target = this;
+			setTimeout(function () {
+				target.scrollIntoView(true)
+            },100)
+        })
+
         $(".chat_input").blur(
             function(){
-                setTimeout(function(){
+                /*setTimeout(function(){*/
                     // input框失去焦点
                     if(!$(".chat_input").is(":focus") && $(".ngmob_footer").css("display")=='none') {
                         $(".live_con").show();
                         $(".ngmob_footer").css("display", 'block');
                         $(".chat_footer").css("display", 'none');
+                        $('.chat_input').val('')  //添加input 为空
                     }
-                }, 200);
+               /* }, 200);*/
             }
         );
 

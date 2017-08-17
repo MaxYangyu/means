@@ -18,11 +18,11 @@
 			<div class="live_con" style="z-index:100;position: absolute;top:0;">
 				<div class="position_left radiu20">
 					<div class="fllow_about_left"><img src="{{ user_img }}" class="head_portrait_img radiu50"></div>
-					<div class="fllow_about_midddle">
+					<div class="fllow_about_midddle" style="padding-top: 0">     <!--去掉padding-top的值 -->
 						<p class="about_name" style="padding-top: .05rem;">{{ user_name }}</p>
 						<p class="about_number"><span id="live_user_num"></span>人</p>
 					</div>
-					<div class="fllow_about_right" style="padding-top: .45rem;">
+					<div class="fllow_about_right" style="padding-top: .35rem;">  <!--.45rem改为.35rem -->
 						<div class="fllow_btn radiu20" style="background: #FF5069;">关注</div>
 					</div>
 				</div>
@@ -245,15 +245,15 @@
             $(n).on(o, w)
         });
         n.id = "player";
-        y(n, '{{ live_url }}', "application/x-mpegURL")
-        n.setAttribute("preload", "auto");
+        y(n, '{{ live_url }}', "application/x-mpegURL");
+        n.setAttribute("style", "/*position: fixed;*/height:inherit");//猜测 加载height慢了 导致视屏的高度
+		n.setAttribute("preload", "auto");
         n.setAttribute("webkit-playsinline", "true");
         n.setAttribute("playsinline", "true");
         n.setAttribute("x-webkit-airplay", "true");
         n.setAttribute("x5-video-player-type", "h5");
         n.setAttribute("x5-video-player-fullscreen", "true");
-        n.setAttribute("style", "position: fixed;");
-        e.appendChild(n);
+		e.appendChild(n);
         if (o || t) {
             n.play()
         }
@@ -298,6 +298,8 @@
             send_message();
         });
 
+        //上面点击 获取焦点并处理显示隐藏  这应该不用再判断
+/*
         $(".chat_input").focus(
             function(){
                 if($(".ngmob_footer").css("display")=='block') {
@@ -307,6 +309,15 @@
                 }
             }
         );
+*/
+
+        //为了解决虚拟键盘挡住input
+        $('.chat_input').focus(function () {
+            var target = this;
+            setTimeout(function () {
+                target.scrollIntoView(true)
+            },100)
+        });
 
         $(".chat_input").blur(
             function(){
@@ -316,6 +327,7 @@
                         $(".live_con").show();
                         $(".ngmob_footer").css("display", 'block');
                         $(".chat_footer").css("display", 'none');
+                        $('.chat_input').val('')  //添加input 为空
                     }
                 }, 200);
             }
